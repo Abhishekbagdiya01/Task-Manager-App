@@ -1,7 +1,6 @@
 import express from "express";
 import authRouter from "./routes/auth";
 
-const port = 8000;
 const hostname = "localhost";
 const app = express();
 app.use(express.json())

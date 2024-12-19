@@ -4,6 +4,7 @@ import { NewUser, users } from "../db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs"
 import { IUserModel } from "../models/IUserModel";
+import jwt from "jsonwebtoken";
 
 const authRouter = Router();
 authRouter.post("/signUp", async (req: Request, res: Response) => {
@@ -64,6 +65,9 @@ authRouter.post("/login", async (req: Request, res: Response) => {
       });
       return;
     }
+    const passKey: string = "passwordKey";
+    const token = jwt.sign({ id: existingUser.id }, passKey)
+    res.json({ token, ...existingUser })
 
   } catch (e) {
     res.status(500).json({ error: e });
