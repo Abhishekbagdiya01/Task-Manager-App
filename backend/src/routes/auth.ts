@@ -74,4 +74,41 @@ authRouter.post("/login", async (req: Request, res: Response) => {
   }
 });
 
+authRouter.post("/tokenIsValid", async (req: Request, res: Response) => {
+  try {
+    //get the header
+    const token = req.header("x-auth-token");
+
+    if (!token) {
+      res.json(false);
+      return;
+    }
+
+    // verify the token if token is valid
+    const verified = jwt.verify(token, "passwordKey");
+    if (!verified) {
+      res.json(false);
+      return;
+    }
+
+    const varifiedToken = verified as {
+      id: string
+    };
+
+    const [user] = await db.select().from(users).where(eq(users.id, varifiedToken.id));
+
+    if (!user) {
+      res.json(false);
+      return;
+    }
+
+    res.json(true);
+
+  } catch (e) {
+    res.status(500).json({
+      erro: e
+    })
+
+  }
+});
 export default authRouter;
