@@ -1,5 +1,5 @@
 import express from "express";
-import authRouter from "./routes/auth";
+import authRouter from "./routes/auth_router";
 
 const hostname = "localhost";
 const app = express();
