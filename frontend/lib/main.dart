@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/features/auth/cubit/auth_cubit.dart';
 import 'package:frontend/features/auth/screens/signup_screen.dart';
-import 'package:frontend/features/home/screens/home_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    BlocProvider<AuthCubit>(
+      create: (context) => AuthCubit(),
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,23 +17,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: ThemeData(
           useMaterial3: true,
           inputDecorationTheme: InputDecorationTheme(
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(width: 2, color: Colors.grey)),
+                  borderSide: const BorderSide(width: 2, color: Colors.grey)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(width: 2)),
+                  borderSide: const BorderSide(width: 2)),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Colors.red),
+                borderSide: const BorderSide(color: Colors.red),
               ),
               focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(color: Colors.red))),
+                  borderSide: const BorderSide(color: Colors.red))),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 60),
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
                 ),
                 backgroundColor: Colors.black),
           )),
-      home: const HomeScreen(),
+      home: const SignUpScreen(),
     );
   }
 }

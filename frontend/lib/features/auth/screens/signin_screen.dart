@@ -1,6 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/core/widgets/snackbar.dart';
+import 'package:frontend/features/auth/cubit/auth_cubit.dart';
+import 'package:frontend/features/auth/screens/signup_screen.dart';
 import 'package:frontend/features/home/screens/home_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -19,6 +21,14 @@ class _SignInScreenState extends State<SignInScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void loginUser() async {
+    if (formKey.currentState!.validate()) {
+      context.read<AuthCubit>().login(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim());
+    }
   }
 
   @override
@@ -68,24 +78,36 @@ class _SignInScreenState extends State<SignInScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        Navigator.pop(context);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ));
-                      }
-                    },
-                    child: const Text("Login",
-                        style: TextStyle(fontSize: 20, color: Colors.white))),
+                BlocListener<AuthCubit, AuthState>(
+                  listener: (context, state) {
+                    if (state is AuthError) {
+                      snackbarMessenger(
+                          context: context, text: state.errorMessage,isError: true);
+                    } else if (state is AuthLoggedIn) {
+                      snackbarMessenger(
+                          context: context, text: "Login successfully!");
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ));
+                    }
+                  },
+                  child: ElevatedButton(
+                      onPressed: loginUser,
+                      child: const Text("Login",
+                          style: TextStyle(fontSize: 20, color: Colors.white))),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpScreen()));
+                  },
                   child: RichText(
                     text: TextSpan(
                         style: Theme.of(context).textTheme.titleMedium,
