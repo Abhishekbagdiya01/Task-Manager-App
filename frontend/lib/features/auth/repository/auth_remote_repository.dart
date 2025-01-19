@@ -6,7 +6,7 @@ import 'package:frontend/features/auth/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRemoteRepository {
-  final pref = Sharedpref();
+  final pref = SharedPref();
   Future<UserModel> signUp({
     required String name,
     required String email,
@@ -87,7 +87,9 @@ class AuthRemoteRepository {
       );
 
       if (userResponse.statusCode != 200) {
-        throw jsonDecode(userResponse.body)['error'];
+        throw ServerException(
+            errorMessage: jsonDecode(response.body)['error'],
+            statusCode: response.statusCode);
       }
 
       return UserModel.fromMap(jsonDecode(userResponse.body));
