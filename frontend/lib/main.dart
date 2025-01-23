@@ -5,6 +5,9 @@ import 'package:frontend/features/auth/screens/signup_screen.dart';
 import 'package:frontend/features/home/screens/home_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize FFI for `sqflite_common_ffi`
   runApp(BlocProvider<AuthCubit>(
       create: (context) => AuthCubit(), child: const MyApp()));
 }
@@ -19,10 +22,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<AuthCubit>().getUserData();
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

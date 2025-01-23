@@ -8,6 +8,8 @@ import jwt from "jsonwebtoken";
 import { auth } from "../middleware/auth";
 import { AuthRequest } from "../interfaces/auth_request";
 const authRouter = Router();
+
+// signUp route
 authRouter.post("/signUp", async (req: Request, res: Response) => {
   try {
     // get req body
@@ -37,6 +39,8 @@ authRouter.post("/signUp", async (req: Request, res: Response) => {
     res.status(500).json({ error: e });
   }
 });
+
+// Login route
 authRouter.post("/login", async (req: Request, res: Response) => {
   try {
     // get req body
@@ -69,6 +73,8 @@ authRouter.post("/login", async (req: Request, res: Response) => {
     res.status(500).json({ error: e });
   }
 });
+
+// Veryfy token
 authRouter.post("/tokenIsValid", async (req: Request, res: Response) => {
   try {
     //get the header
@@ -100,6 +106,8 @@ authRouter.post("/tokenIsValid", async (req: Request, res: Response) => {
     });
   }
 });
+
+//Fetch user data
 authRouter.get("/", auth, async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
