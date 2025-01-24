@@ -82,7 +82,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   listener: (context, state) {
                     if (state is AuthError) {
                       snackbarMessenger(
-                          context: context, text: state.errorMessage,isError: true);
+                          context: context,
+                          text: state.errorMessage,
+                          isError: true);
                     } else if (state is AuthLoggedIn) {
                       snackbarMessenger(
                           context: context, text: "Login successfully!");

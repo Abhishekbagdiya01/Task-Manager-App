@@ -95,19 +95,29 @@ class _SignupScreenState extends State<SignUpScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  BlocListener<AuthCubit,AuthState>(
+                  BlocListener<AuthCubit, AuthState>(
                     listener: (context, state) {
-                     if(state is AuthSignUp){
-                      snackbarMessenger(context: context,text:  "Accout created successfully");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SignInScreen(),));
-                      }else if(state is AuthError){
-                      snackbarMessenger(context: context,text:  state.errorMessage,isError: true);
+                      if (state is AuthSignUp) {
+                        snackbarMessenger(
+                            context: context,
+                            text: "Accout created successfully");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignInScreen(),
+                            ));
+                      } else if (state is AuthError) {
+                        snackbarMessenger(
+                            context: context,
+                            text: state.errorMessage,
+                            isError: true);
                       }
                     },
                     child: ElevatedButton(
                         onPressed: signUpUser,
                         child: const Text("Sign-Up",
-                            style: TextStyle(fontSize: 20, color: Colors.white))),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white))),
                   ),
                   const SizedBox(
                     height: 10,

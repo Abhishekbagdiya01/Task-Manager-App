@@ -20,7 +20,7 @@ class AuthLocalRepository {
           $email Text NOT NULL ,
           $token Text NOT NULL ,
           $createdAt Text NOT NULL ,
-          $updateAt Text NOT NULL ,
+          $updateAt Text NOT NULL 
       )
       '''));
   }
@@ -34,10 +34,10 @@ class AuthLocalRepository {
 
   Future<UserModel?> getUser() async {
     final db = await openDb();
-  final data = await db.query(tableName, limit: 1);
-      if (data.isNotEmpty) {
-       return UserModel.fromMap(data.first); 
-      }
-      return null;
+    final data = await db.query(tableName, limit: 1);
+    if (data.isNotEmpty) {
+      return UserModel.fromMap(data.first);
+    }
+    return null;
   }
 }
