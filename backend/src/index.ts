@@ -4,7 +4,7 @@ import taskRouter from "./routes/task_router";
 const app = express();
 app.use(express.json());
 app.use("/auth/", authRouter);
-app.use("/task/", taskRouter);
+app.use("/tasks/", taskRouter);
 app.get("/", (request: Express.Request, response: Express.Response | any) => {
   response.send(`Welcome to my app`);
 });

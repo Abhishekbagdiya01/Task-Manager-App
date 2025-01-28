@@ -21,8 +21,8 @@ class UserModel {
       'name': name,
       'email': email,
       'token': token,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 

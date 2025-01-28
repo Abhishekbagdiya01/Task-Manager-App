@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +33,7 @@ class _DateSelecterState extends State<DateSelecter> {
                 )),
             Text(
               monthName,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             IconButton(
                 onPressed: () {
@@ -63,7 +61,6 @@ class _DateSelecterState extends State<DateSelecter> {
               return InkWell(
                 onTap: () {
                   selectedDate = date;
-                  log("$selectedDate == $date");
                   setState(() {});
                 },
                 child: Container(

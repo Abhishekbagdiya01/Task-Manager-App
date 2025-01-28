@@ -9,7 +9,7 @@ class AuthLocalRepository {
   String email = "email";
   String token = "token";
   String createdAt = "createdAt";
-  String updateAt = "updateAt";
+  String updatedAt = "updatedAt";
   Future<Database> openDb() async {
     String path = join(await getDatabasesPath(), "auth.db");
     return await openDatabase(path,
@@ -20,7 +20,7 @@ class AuthLocalRepository {
           $email Text NOT NULL ,
           $token Text NOT NULL ,
           $createdAt Text NOT NULL ,
-          $updateAt Text NOT NULL 
+          $updatedAt Text NOT NULL 
       )
       '''));
   }

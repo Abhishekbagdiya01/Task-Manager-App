@@ -3,17 +3,16 @@ import { db } from "../db/db";
 import { tasks, NewTask } from "../db/schema";
 import { ITaskModel } from "../models/ITask_model";
 import { eq } from "drizzle-orm";
+import { auth } from "../middleware/auth";
+import { AuthRequest } from "../interfaces/auth_request";
 const taskRouter = Router();
 //Fetch All Task
-taskRouter.post("/", async (req: Request, res: Response) => {
+taskRouter.get("/", auth, async (req: AuthRequest, res: Response) => {
   try {
-    //get body
-    const uid = req.body;
-
     // add task to the db
     const taskList = await db
       .select()
-      .from(tasks).where(eq(tasks.uid, uid));
+      .from(tasks).where(eq(tasks.uid, req.user!));
     // send Response
     res.status(200).json(taskList);
   } catch (e) {
@@ -22,9 +21,10 @@ taskRouter.post("/", async (req: Request, res: Response) => {
 });
 
 //Create Task
-taskRouter.post("/createTask", async (req: Request, res: Response) => {
+taskRouter.post("/addTask", auth, async (req: AuthRequest, res: Response) => {
   try {
     //get body
+    req.body = { ...req.body, uid: req.user }
     const taskModel: ITaskModel = req.body;
     // create new task
     const newTask: NewTask = {
@@ -46,18 +46,16 @@ taskRouter.post("/createTask", async (req: Request, res: Response) => {
   }
 });
 //Delete Task
-taskRouter.delete("/updateTask", async (req: Request, res: Response) => {
+taskRouter.delete("/deleteTask", auth, async (req: AuthRequest, res: Response) => {
   try {
     //get body
-    const taskId = req.body;
+    const taskId = req.body.id;
     // Delete Task
     await db
       .delete(tasks)
       .where(eq(tasks.id, taskId));
     // send Response
-    res.status(200).json({
-      "message": "Task deleted successfully"
-    });
+    res.status(200).json(true);
   } catch (e) {
     res.status(500).json({ error: e });
   }

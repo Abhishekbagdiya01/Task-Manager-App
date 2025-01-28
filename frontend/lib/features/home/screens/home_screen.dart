@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/home/screens/date.selecter.dart';
+import 'package:frontend/features/home/screens/add_task_screen.dart';
+import 'package:frontend/features/home/widgets/date.selecter.dart';
 import 'package:frontend/features/home/widgets/task_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +19,14 @@ class _HomeScreenState extends State<HomeScreen> {
             "My Task",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))],
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddTaskScreen()));
+                },
+                icon: const Icon(Icons.add))
+          ],
           elevation: 5,
         ),
         body: Center(

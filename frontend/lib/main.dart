@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/features/auth/cubit/auth_cubit.dart';
 import 'package:frontend/features/auth/screens/signup_screen.dart';
+import 'package:frontend/features/home/cubit/task_cubit.dart';
 import 'package:frontend/features/home/screens/home_screen.dart';
 
 void main() {
-  runApp(BlocProvider<AuthCubit>(
-      create: (context) => AuthCubit(), child: const MyApp()));
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
+    BlocProvider<TaskCubit>(create: (context) => TaskCubit()),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -56,7 +59,7 @@ class _MyAppState extends State<MyApp> {
           if (state is AuthLoggedIn) {
             return const HomeScreen();
           }
-          return const HomeScreen();
+          return const SignUpScreen();
         },
       ),
     );

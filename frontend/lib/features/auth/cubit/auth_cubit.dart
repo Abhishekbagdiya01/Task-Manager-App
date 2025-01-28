@@ -38,7 +38,6 @@ class AuthCubit extends Cubit<AuthState> {
       if (userModel.token.isNotEmpty) {
         await pref.setToken(userModel.token);
       }
-
       authLocalRepository.insertUser(userModel);
       emit(AuthLoggedIn(userModel));
     } catch (e) {
