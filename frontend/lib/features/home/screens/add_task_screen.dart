@@ -7,6 +7,7 @@ import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/core/widgets/snackbar.dart';
 import 'package:frontend/features/home/cubit/task_cubit.dart';
 import 'package:frontend/features/home/models/task_model.dart';
+import 'package:frontend/features/home/screens/home_screen.dart';
 import 'package:intl/intl.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -36,6 +37,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
           title: const Text(
@@ -106,8 +108,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ],
                 ),
                 ColorPicker(
+                  heading: const Text('Select color'),
+                  subheading: const Text('Select a different shade'),
                   onColorChanged: (color) {
                     selectedColor = color;
+                  },
+                  color: selectedColor,
+                  pickersEnabled: const {
+                    ColorPickerType.wheel: true,
                   },
                 ),
                 BlocListener<TaskCubit, TaskState>(
@@ -116,7 +124,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     if (state is TaskAdded) {
                       snackbarMessenger(
                           context: context, text: "Task added successfully!");
-                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                        (_) => false,
+                      );
                       log(state.toString());
                     } else if (state is TaskError) {
                       snackbarMessenger(

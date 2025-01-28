@@ -3,14 +3,15 @@ import 'package:frontend/core/utils/utils.dart';
 import 'package:intl/intl.dart';
 
 class DateSelecter extends StatefulWidget {
-  DateSelecter({Key? key}) : super(key: key);
-
+  DateSelecter({Key? key, required this.selectedDate, required this.onTap})
+      : super(key: key);
+  DateTime selectedDate;
+  Function(DateTime) onTap;
   @override
   _DateSelecterState createState() => _DateSelecterState();
 }
 
 class _DateSelecterState extends State<DateSelecter> {
-  DateTime selectedDate = DateTime.now();
   int weekOffSet = 0;
   @override
   Widget build(BuildContext context) {
@@ -22,29 +23,31 @@ class _DateSelecterState extends State<DateSelecter> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                onPressed: () {
-                  setState(() {
-                    weekOffSet--;
-                  });
-                },
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 30,
-                )),
+              onPressed: () {
+                setState(() {
+                  weekOffSet--;
+                });
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                size: 30,
+              ),
+            ),
             Text(
               monthName,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             IconButton(
-                onPressed: () {
-                  setState(() {
-                    weekOffSet++;
-                  });
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 30,
-                )),
+              onPressed: () {
+                setState(() {
+                  weekOffSet++;
+                });
+              },
+              icon: const Icon(
+                Icons.arrow_forward_ios,
+                size: 30,
+              ),
+            ),
           ],
         ),
         SizedBox(
@@ -54,15 +57,12 @@ class _DateSelecterState extends State<DateSelecter> {
             itemCount: weekDates.length,
             itemBuilder: (context, index) {
               DateTime date = weekDates[index];
-              bool isSelected = DateFormat('d').format(selectedDate) ==
+              bool isSelected = DateFormat('d').format(widget.selectedDate) ==
                       DateFormat('d').format(date) &&
-                  selectedDate.month == date.month &&
-                  selectedDate.year == date.year;
+                  widget.selectedDate.month == date.month &&
+                  widget.selectedDate.year == date.year;
               return InkWell(
-                onTap: () {
-                  selectedDate = date;
-                  setState(() {});
-                },
+                onTap: () => widget.onTap(date),
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.all(5),

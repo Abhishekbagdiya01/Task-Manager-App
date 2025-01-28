@@ -27,4 +27,30 @@ class TaskRemoteRepository {
       throw e.toString();
     }
   }
+
+  Future<List<TaskModel>> getTasks() async {
+    try {
+      String? token = await pref.getToken();
+      // 🚨 Handle missing token case
+      if (token == null) {
+        throw Exception("Token is missing. Please log in again.");
+      }
+      final response = await http.get(
+        Uri.parse("${Constants.baseUrl}/tasks/"),
+        headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+      );
+      if (response.statusCode != 200) {
+        throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+      }
+      final arrTasks = jsonDecode(response.body);
+      List<TaskModel> taskList = [];
+
+      for (var element in arrTasks) {
+        taskList.add(TaskModel.fromMap(element));
+      }
+      return taskList;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
