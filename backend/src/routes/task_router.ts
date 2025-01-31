@@ -5,7 +5,7 @@ import { ITaskModel } from "../models/ITask_model";
 import { eq } from "drizzle-orm";
 import { auth } from "../middleware/auth";
 import { AuthRequest } from "../interfaces/auth_request";
-const taskRouter = Router();
+export const taskRouter = Router();
 //Fetch All Task
 taskRouter.get("/", auth, async (req: AuthRequest, res: Response) => {
   try {
@@ -26,8 +26,10 @@ taskRouter.post("/addTask", auth, async (req: AuthRequest, res: Response) => {
     //get body
     req.body = { ...req.body, uid: req.user }
     const taskModel: ITaskModel = req.body;
+    console.log(taskModel);
     // create new task
     const newTask: NewTask = {
+      id: taskModel.id,
       uid: taskModel.uid,
       title: taskModel.title,
       description: taskModel.description,
@@ -42,6 +44,32 @@ taskRouter.post("/addTask", auth, async (req: AuthRequest, res: Response) => {
     // send Response
     res.status(200).json(task);
   } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+// Sync Task
+taskRouter.post("/syncTask", auth, async (req: AuthRequest, res: Response) => {
+  try {
+    //get body
+    const taskList = req.body;
+    const filteredList: NewTask[] = [];
+    for (let task of taskList) {
+      task = {
+        ...task,
+        dueAt: new Date(task.dueAt),
+        createdAt: new Date(task.createdAt),
+        updatedAt: new Date(task.updatedAt),
+        uid: req.user
+      };
+      filteredList.push(task);
+    }
+    // add task to the db
+    const pushedTask = await db.insert(tasks).values(filteredList).returning();
+    // send Response
+    console.log(pushedTask);
+    res.status(200).json(pushedTask);
+  } catch (e) {
+    console.log(e);
     res.status(500).json({ error: e });
   }
 });

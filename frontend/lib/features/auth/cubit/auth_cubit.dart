@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/utils/shared_pref.dart';
 import 'package:frontend/features/auth/models/user_model.dart';
@@ -38,7 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (userModel.token.isNotEmpty) {
         await pref.setToken(userModel.token);
       }
-      authLocalRepository.insertUser(userModel);
+      await authLocalRepository.insertUser(userModel);
       emit(AuthLoggedIn(userModel));
     } catch (e) {
       emit(AuthError(e.toString()));
@@ -49,14 +51,16 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(AuthLoading());
       UserModel? userModel = await authRemoteRepository.getUserData();
-      authLocalRepository.insertUser(userModel!);
+      await authLocalRepository.insertUser(userModel!);
       emit(AuthLoggedIn(userModel));
     } catch (e) {
       UserModel? userModel = await authLocalRepository.getUser();
-      if (userModel != null) {
+      if (userModel == null) {
+        log("usermodel ? $userModel");
+        emit(AuthError(e.toString()));
+      } else {
         emit(AuthLoggedIn(userModel));
       }
-      emit(AuthError(e.toString()));
     }
   }
 }

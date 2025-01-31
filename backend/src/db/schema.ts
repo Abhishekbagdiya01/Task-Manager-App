@@ -19,7 +19,7 @@ export type NewUser = typeof users.$inferInsert;
 // Schema for Task table
 
 export const tasks = pgTable("tasks", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: uuid("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description").notNull(),
   hexColor: text("hex_color").notNull(),

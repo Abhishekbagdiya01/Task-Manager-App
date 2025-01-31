@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:frontend/core/%20error/server_exception.dart';
 import 'package:frontend/core/constants/constant.dart';
 import 'package:frontend/core/utils/shared_pref.dart';
@@ -47,7 +48,7 @@ class AuthRemoteRepository {
           'password': password,
         }),
       );
-
+      log(response.body);
       if (response.statusCode != 200) {
         throw ServerException(
             errorMessage: jsonDecode(response.body)['error'],

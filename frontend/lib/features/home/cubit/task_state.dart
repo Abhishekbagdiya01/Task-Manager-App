@@ -5,9 +5,9 @@ sealed class TaskState {}
 final class TaskInitial extends TaskState {}
 
 final class TaskAdded extends TaskState {
-  final TaskModel taskmodel;
+  // final TaskModel taskmodel;
 
-  TaskAdded({required this.taskmodel});
+  TaskAdded();
 }
 
 final class TaskLoaded extends TaskState {

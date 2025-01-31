@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:frontend/core/%20error/server_exception.dart';
 import 'package:frontend/core/constants/constant.dart';
 import 'package:frontend/core/utils/shared_pref.dart';
@@ -51,6 +52,32 @@ class TaskRemoteRepository {
       return taskList;
     } catch (e) {
       throw e.toString();
+    }
+  }
+
+  Future<bool> syncTask(List<TaskModel> listOfTask) async {
+    try {
+      String? token = await pref.getToken();
+      if (token == null) {
+        throw Exception("Token is missing. Please log in again.");
+      }
+      final listOfTaskMap = [];
+      for (var task in listOfTask) {
+        listOfTaskMap.add(task.toMap());
+      }
+      final response = await http.post(
+          Uri.parse("${Constants.baseUrl}/tasks/syncTask"),
+          headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+          body: jsonEncode(listOfTaskMap));
+
+      log("RESPONSE : ${response.body}");
+      if (response.statusCode != 200) {
+        throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+      }
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
     }
   }
 }

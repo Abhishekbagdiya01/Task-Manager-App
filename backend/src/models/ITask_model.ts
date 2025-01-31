@@ -1,5 +1,6 @@
 export interface ITaskModel {
-  uid: string
+  id: string;
+  uid: string;
   title: string;
   description: string;
   hexColor: string;

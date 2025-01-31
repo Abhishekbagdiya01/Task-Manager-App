@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/utils/utils.dart';
@@ -21,7 +21,15 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<TaskCubit>().getTasks();
+    context.read<TaskCubit>().loadTasks();
+    Connectivity().onConnectivityChanged.listen(
+      (event) async {
+        if (event.contains(ConnectivityResult.wifi)) {
+          // ignore: use_build_context_synchronously
+          await context.read<TaskCubit>().syncTasks();
+        }
+      },
+    );
   }
 
   DateTime selectedDate = DateTime.now();
@@ -46,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: BlocBuilder<TaskCubit, TaskState>(
           builder: (context, state) {
+            log("State on home page + $state");
             if (state is TaskLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is TaskError) {

@@ -1,14 +1,16 @@
 import 'dart:developer';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/core/widgets/snackbar.dart';
+import 'package:frontend/features/auth/repository/auth_local_repository.dart';
 import 'package:frontend/features/home/cubit/task_cubit.dart';
 import 'package:frontend/features/home/models/task_model.dart';
 import 'package:frontend/features/home/screens/home_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class AddTaskScreen extends StatefulWidget {
   AddTaskScreen({super.key});
@@ -119,32 +121,49 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   },
                 ),
                 BlocListener<TaskCubit, TaskState>(
-                  listener: (context, state) {
+                  listener: (context, state) async {
                     log(state.toString());
                     if (state is TaskAdded) {
                       snackbarMessenger(
                           context: context, text: "Task added successfully!");
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()),
                         (_) => false,
                       );
-                      log(state.toString());
                     } else if (state is TaskError) {
                       snackbarMessenger(
-                          context: context,
-                          text: state.errorMessage,
-                          isError: true);
+                        context: context,
+                        text:
+                            "You are not connected to internet, Task update locally ",
+                      );
+
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()),
+                        (_) => false,
+                      );
                     }
+                    log("state on add task screen: $state");
                   },
                   child: OutlinedButton(
-                    onPressed: () => addNewTask(TaskModel(
-                        title: titleController.text.trim(),
-                        description: descController.text.trim(),
-                        hexColor: rgbToHex(selectedColor),
-                        dueAt: selectedDate,
-                        createdAt: null,
-                        updatedAt: null)),
+                    onPressed: () async {
+                      final user = await AuthLocalRepository().getUser();
+                      addNewTask(
+                        TaskModel(
+                            id: Uuid().v6(),
+                            title: titleController.text.trim(),
+                            description: descController.text.trim(),
+                            uid: user!.id,
+                            hexColor: rgbToHex(selectedColor),
+                            dueAt: selectedDate,
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
+                            isSynced: 0),
+                      );
+                    },
                     child: const Text("Upload Task"),
                   ),
                 )
