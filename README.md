@@ -36,7 +36,16 @@ A **simple offline-first Task Manager App** built with **Flutter** for the front
 
 ## Screenshots 📸
 
-_(SOON WILL BE UPDATE)_
+<table>
+  <tr>
+    <td><img src="https://github.com/Abhishekbagdiya01/Task-Manager-App/blob/main/screenshots/signup_screen.png" width="100%"/></td>
+    <td><img src="https://github.com/Abhishekbagdiya01/Task-Manager-App/blob/main/screenshots/login_screen.png" width="100%"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/Abhishekbagdiya01/Task-Manager-App/blob/main/screenshots/home_screen.png" width="100%"/></td>
+    <td><img src="https://github.com/Abhishekbagdiya01/Task-Manager-App/blob/main/screenshots/add_task_screen.png" width="100%"/></td>
+  </tr>
+</table>
 
 ---
 
