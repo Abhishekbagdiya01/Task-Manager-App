@@ -123,6 +123,8 @@ backend/
   src ├── controllers/
       ├── routes/
       ├── models/
+      ├── db/
+      ├── interface/
       └── index.ts
 ├── Dockerfile
 ├── docker-compose.yaml
@@ -133,10 +135,21 @@ backend/
 ```
 frontend/
 ├── lib/
-│   ├── models/
-│   ├── screens/
-│   ├── widgets/
-│   ├── services/
+│   ├── core/
+|   |         ├── error/
+|   |         ├── const/
+|   |         ├── utils/
+|   |         ├── widgets/            
+│   ├── features/
+|   |         ├── auth/
+|   |         |      ├── cubit/
+|   |         |      ├── screen/
+|   |         |      ├── model/
+|   |         |      ├── repository/
+|   |         ├── task/
+|   |                ├── cubit/
+|   |                ├── screen/
+|   |                ├── repository/
 │   └── main.dart
 ├── pubspec.yaml
 └── assets/
